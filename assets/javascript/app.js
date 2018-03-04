@@ -6,9 +6,7 @@ $(document).ready(function () {
 		theWholeGame.addQA();
 	});
 
-	$("#reset").on("click", function () {
-		theWholeGame.startOver();
-	});
+
 
 
 	// on click of answer buttons links to clickedOn funct.
@@ -110,7 +108,7 @@ $(document).ready(function () {
 	var theWholeGame = {
 		questions: questions,
 		currentQA: 0,
-		timer: 30, //seconds
+		timer: 7, //seconds
 		numCorrect: 0,
 		numInCorrect: 0,
 		unanswered: 0,
@@ -143,7 +141,7 @@ $(document).ready(function () {
 			// clear buttons
 			$('#buttons').html("");
 
-			$('#buttons').html("<img src=" + controllerImg +">");
+			$('#buttons').html("<img src=" + controllerImg + ">");
 
 			// adding buttons dynamically each time a new question is loaded
 			for (var i = 0; i < questions[theWholeGame.currentQA].answers.length; i++) {
@@ -159,7 +157,7 @@ $(document).ready(function () {
 		nextQA: function () {
 
 			// reset timer
-			theWholeGame.timer = 30;
+			theWholeGame.timer = 7;
 			$("#timer").html(theWholeGame.timer);
 
 			// 
@@ -182,9 +180,9 @@ $(document).ready(function () {
 		stats: function () {
 			clearInterval(timer);
 			$("#display").html("<h2>Thats it.</h2>");
-			$("#stats").append("<h3>Correct: " + theWholeGame.numCorrect + "</h3>");
-			$("#stats").append("<h3>Incorrect: " + theWholeGame.numInCorrect + "</h3>");
-			$("#stats").append("<h3>Unanswered: " + theWholeGame.unanswered + "</h3>");
+			$("#correct").append(" " + theWholeGame.numCorrect);
+			$("#incorrect").append(" " + theWholeGame.numInCorrect);
+			$("#unanswerd").append(" " + theWholeGame.unanswered);
 			$("#stats").append("<button id='reset'>RESET</button>");
 		},
 
@@ -218,7 +216,7 @@ $(document).ready(function () {
 			clearInterval(timer);
 			theWholeGame.numInCorrect++;
 			$("#display").html('<h2>You are the weakest link, goodbye!</h2>');
-			$("#display").html("<h3>The correct answer was..." + questions[theWholeGame.currentQA].correctAnswer + "</h3>");
+			$("#display").append("<h3>The correct answer was..." + questions[theWholeGame.currentQA].correctAnswer + "</h3>");
 			if (theWholeGame.currentQA == questions.length - 1) {
 				setTimeout(theWholeGame.stats, 3000);
 			} else {
@@ -227,18 +225,25 @@ $(document).ready(function () {
 		},
 
 		startOver: function () {
-			currentQA = 0;
-			timer = 30; //seconds
-			numCorrect = 0;
-			numInCorrect = 0;
-			unanswered = 0;
+
+			theWholeGame.currentQA = 0;
+			theWholeGame.numCorrect = 0;
+			theWholeGame.numInCorrect = 0;
+			theWholeGame.unanswered = 0;
+			$("#correct").html(" " + theWholeGame.numCorrect);
+			$("#incorrect").html(" " + theWholeGame.numInCorrect);
+			$("#unanswerd").html(" " + theWholeGame.unanswered);
+			$("#reset").remove();
 
 			// stats.remove();
-			theWholeGame.addQA();
+			theWholeGame.nextQA();
+
 		}
 	}
 
-
+	$(document).on("click", "#reset", function () {
+		theWholeGame.startOver();
+	});
 
 
 
